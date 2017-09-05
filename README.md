@@ -16,7 +16,7 @@ import (
     "fmt"
     "sync/atomic"
     "time"
-    "github.com/singchia/scheduler"
+    scheduler "github.com/singchia/go-scheduler"
 )
 
 func main() {
