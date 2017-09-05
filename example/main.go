@@ -5,7 +5,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	scheduler "../../go-scheduler"
+	scheduler "github.com/singchia/go-scheduler"
 )
 
 func main() {
