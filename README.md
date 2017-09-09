@@ -5,7 +5,7 @@ A simple scheduler for goroutines, **go-scheduler** helps to manage goroutines, 
 * the maximum count of processed requests per interval 
 * the maximum value of rate (processed requests per interval/ incoming requests per interval) 
 
-Actually **go-sheduler** only adjust count of goroutines to satisfy those quotas if set, the strategy is gradienter by default, if runtime statistics don't match any quotas, **go-sheduler** starts to work.  
+Actually **go-sheduler** only adjust count of goroutines to satisfy those quotas if set, the default strategy works like gradienter, if runtime statistics don't match any quotas, **go-sheduler** starts to work.  
 Since scheduler manage goroutines to handle user's **_Request_** which contains **_Data_** and **_Handler_**, the scheduler simple call **_Request.Handler(Request.Data)_**.  
 **note:**  three optional quotas are only undercontrolled in **go-scheduler**
 
