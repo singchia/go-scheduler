@@ -9,7 +9,7 @@ Actually **go-sheduler** only adjust count of goroutines to satisfy those quotas
 Since scheduler manage goroutines to handle user's **_Request_** which contains **_Data_** and **_Handler_**, the scheduler simple call **_Request.Handler(Request.Data)_**.  
 **note:**  three optional quotas are only undercontrolled in **go-scheduler**
 
-# How-to-use
+## How-to-use
 **go-scheduler** supplies several easy-understand and easy-integrate interfaces, Let's see a easy sample.
 ```	golang
 import (
@@ -48,13 +48,13 @@ func SchedulerHandler(data interface{}) {
 ```  
 It's not a good sample in production environment, but it do illustrate the usage  of **go-scheduler**. After **_SetMaxGoroutines(5000)_**, the max count of scheduler's goroutines shouldn't go beyond the range **_5000_**, use **_StartSchedule_** to start the scheduler, publish the **_Request_** into the scheduler by using **_PublishRequest_**, then scheduler will handle the request undercontrol.
 
-# Installation
+## Installation
 If you don't have the Go development environment installed, visit the [Getting Started](https://golang.org/doc/install) document and follow the instructions. Once you're ready, execute the following command:
 ```
 go get -u github.com/singchia/go-scheduler
 ```
 
-# Interfaces
+## Interfaces
 #### _Scheduler.Interval_
 This should be set before call **_StartSchedule_** and bigger than **_500us_**, if not set or less than **_500us_**, default 200ms.
 
@@ -76,7 +76,7 @@ You can use this to monitor incoming requests, processed requests, shift（chang
 #### _Scheduler.SetStrategy(scheduler.Strategy)_
 **_scheduler.Strategy_** is the key deciding how to shift(update) the count of goroutines, you can replace it as your own strategy.
 
-# Strategy
+## Strategy
 #### _scheduler.Gradienter_
 Defaultly **go-scheduler** uses _Gradienter_ as strategy, it behaves like:
 ```
