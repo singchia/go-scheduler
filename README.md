@@ -88,4 +88,4 @@ if all quotas < max quotas then expand randFloat * incomingReqs / (incomingReqs 
 ```
 
 #### other strategies
-In scheduler file, a circularLink.go exists, I was trying to looking for next goroutines-updating using history status, but temporarily not a idea came up, if you have some idea welcome to contact me.
+In scheduler file, a circularLink.go exists, I was trying to looking for next goroutines-updating using history status, but temporarily not an idea came up, if you have some idea welcome to contact me.
