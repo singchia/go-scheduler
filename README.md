@@ -83,7 +83,7 @@ Defaultly **go-scheduler** uses _Gradienter_ as strategy, it behaves like:
 if incoming requests == 0 then shrink 20%
 if any quotas > max quotas then shrink the count of goroutines
 	if quotas == 1 then shrink directly to MaxGoroutines
-	else then shrink 20%  
+	else shrink 20%  
 if all quotas < max quotas then expand randFloat * incomingReqs / (incomingReqs + maxCountGoroutines) * (maxCountGoroutines - currentCountGoroutines)
 ```
 
