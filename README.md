@@ -81,11 +81,11 @@ You can use this to monitor incoming requests, processed requests, shift（chang
 Defaultly **go-scheduler** uses _Gradienter_ as strategy, it behaves like:
 ```
 if incoming requests == 0 then shrink 20%
-if any quotas > max quotas then shrink the count of goroutine
-	if quotas 1 then shrink as directly shrink to MaxGoroutines
-	if others then shrink 20%  
+if any quotas > max quotas then shrink the count of goroutines
+	if quotas == 1 then shrink directly to MaxGoroutines
+	else then shrink 20%  
 if all quotas < max quotas then expand randFloat * incomingReqs / (incomingReqs + maxCountGoroutines) * (maxCountGoroutines - currentCountGoroutines)
 ```
 
 #### other strategies
-In scheduler file, a circularLink.go exists, I was trying to looking for next goroutines-updating using history status, but temporarily not an idea came up, if you have some idea welcome to contact me.
+In scheduler file, a circularLink.go exists, I was trying to looking for next goroutines-updating by using history status, but temporarily no idea came up, if you have some idea welcome to contact me.
