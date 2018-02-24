@@ -46,7 +46,7 @@ func SchedulerHandler(data interface{}) {
     }
 }
 ```  
-It's not a good sample in production environment, but it do illustrate the usage  of **go-scheduler**. After **_SetMaxGoroutines(5000)_**, the max count of scheduler's goroutines shouldn't go beyond the range **_5000_**, use **_StartSchedule_** to start the scheduler, publish the **_Request_** into the scheduler by using **_PublishRequest_**, then scheduler will handle the request undercontrol.
+It's not a good sample in production environment, but it does illustrate the usage  of **go-scheduler**. After **_SetMaxGoroutines(5000)_**, the max count of scheduler's goroutines shouldn't go beyond the range **_5000_**, use **_StartSchedule_** to start the scheduler, publish the **_Request_** into the scheduler by using **_PublishRequest_**, then scheduler will handle the request undercontrol.
 
 ## Installation
 If you don't have the Go development environment installed, visit the [Getting Started](https://golang.org/doc/install) document and follow the instructions. Once you're ready, execute the following command:
