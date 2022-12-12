@@ -60,8 +60,8 @@ func NewScheduler() *Scheduler {
 		countProcessedReqs:  0,
 		countProcessedReqsL: 0,
 		numActives:          0,
-		incomingChan:        make(chan *Request, 1024*1024),
-		closeChan:           make(chan struct{}, 1024*10),
+		incomingChan:        make(chan *Request, 1024),
+		closeChan:           make(chan struct{}, 1024),
 		allCloseChan:        make(chan struct{}, 1)}
 	scheduler.expandGoRoutines(initialNum)
 	return scheduler
