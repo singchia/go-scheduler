@@ -59,7 +59,7 @@ func NewScheduler() *Scheduler {
 		countIncomingReqsL:  0,
 		countProcessedReqs:  0,
 		countProcessedReqsL: 0,
-		numActives:          0,
+		numActives:          initialNum,
 		incomingChan:        make(chan *Request, 1024),
 		closeChan:           make(chan struct{}, 1024),
 		allCloseChan:        make(chan struct{}, 1)}
