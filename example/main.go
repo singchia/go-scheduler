@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+	_ "net/http/pprof"
+	"runtime"
 	"sync/atomic"
 	"time"
 
@@ -9,10 +12,14 @@ import (
 )
 
 func main() {
+
+	go func() {
+		http.ListenAndServe("0.0.0.0:6060", nil)
+	}()
+
 	sch := scheduler.NewScheduler()
 	sch.Interval = time.Millisecond * 100
 
-	//sch.SetDefaultHandler(SchedulerHandler)
 	sch.SetMonitor(SchedulerMonitor)
 	sch.SetMaxRate(0.95)
 	sch.SetMaxGoroutines(5000)
@@ -22,11 +29,13 @@ func main() {
 	for i := 0; i < 100*10000*10; i++ {
 		sch.PublishRequest(&scheduler.Request{Data: val, Handler: SchedulerHandler})
 		atomic.AddInt64(&val, 1)
-		//time.Sleep(time.Microsecond * 10)
 	}
 	time.Sleep(time.Second * 10)
 	fmt.Printf("maxValue: %d\n", maxValue)
+
 	sch.Close()
+	time.Sleep(2 * time.Second)
+	fmt.Println(runtime.NumGoroutine())
 }
 
 var maxValue int64 = 0

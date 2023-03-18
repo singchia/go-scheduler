@@ -51,7 +51,7 @@ type Request struct {
 }
 
 func NewScheduler() *Scheduler {
-	var initialNum int64 = 10
+	var initialNum int64 = 1
 	scheduler := &Scheduler{
 		Interval:            time.Millisecond * 200,
 		strategy:            NewGradienter(),
@@ -59,7 +59,7 @@ func NewScheduler() *Scheduler {
 		countIncomingReqsL:  0,
 		countProcessedReqs:  0,
 		countProcessedReqsL: 0,
-		numActives:          initialNum,
+		numActives:          0,
 		incomingChan:        make(chan *Request, 1024),
 		closeChan:           make(chan struct{}, 1024),
 		allCloseChan:        make(chan struct{}, 1)}

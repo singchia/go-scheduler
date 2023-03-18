@@ -1,6 +1,9 @@
 package scheduler
 
-import "math/rand"
+import (
+	"math"
+	"math/rand"
+)
 
 type Strategy interface {
 	//SetMaxQuota(maxProcessedReqs int, maxRate float64, maxActives int)
@@ -103,7 +106,7 @@ func (g *Gradienter) ExpandOrShrink(ir int64, pr int64, numActives int64) (diff 
 	case MaxProcessedReqsNeedsShrinking:
 		//shrink 20%, should've add some weight like others
 		shrinks := float64(numActives) * 0.2 * -1
-		return int64(shrinks)
+		return int64(math.Floor(shrinks))
 
 	case MaxRateNeedsExpansion:
 		return g.expand(ir, pr, numActives)
@@ -111,7 +114,7 @@ func (g *Gradienter) ExpandOrShrink(ir int64, pr int64, numActives int64) (diff 
 	case MaxRateNeedsShrinking:
 		//shrink 20%
 		shrinks := float64(numActives) * 0.2 * -1
-		return int64(shrinks)
+		return int64(math.Floor(shrinks))
 	}
 	return 0
 }
