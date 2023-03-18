@@ -62,7 +62,7 @@ func NewScheduler() *Scheduler {
 		numActives:          0,
 		incomingChan:        make(chan *Request, 1024),
 		closeChan:           make(chan struct{}, 1024),
-		allCloseChan:        make(chan struct{}, 1)}
+		allCloseChan:        make(chan struct{})}
 	scheduler.expandGoRoutines(initialNum)
 	return scheduler
 }
@@ -122,28 +122,32 @@ func (s *Scheduler) control() {
 	for {
 		select {
 		case <-timer.C:
+			numActives := atomic.LoadInt64(&s.numActives)
 			incomingReqsDiff := s.countIncomingReqs - s.countIncomingReqsL
 			processedReqsDiff := s.countProcessedReqs - s.countProcessedReqsL
 			s.countIncomingReqsL = s.countIncomingReqs
 			s.countProcessedReqsL = s.countProcessedReqs
 
 			s.runtimeLock.RLock()
-			shift := s.strategy.ExpandOrShrink(incomingReqsDiff, processedReqsDiff, s.numActives)
+			shift := s.strategy.ExpandOrShrink(incomingReqsDiff, processedReqsDiff, numActives)
 			s.runtimeLock.RUnlock()
 
-			if s.monitor != nil {
-				s.monitor(incomingReqsDiff, processedReqsDiff, shift, s.numActives+shift)
+			if shift < 0 && numActives == 1 {
+				// at least reserve 1 to handle request
+				if s.monitor != nil {
+					s.monitor(incomingReqsDiff, processedReqsDiff, shift, numActives)
+				}
+				continue
+			} else {
+				if s.monitor != nil {
+					s.monitor(incomingReqsDiff, processedReqsDiff, shift, numActives+shift)
+				}
 			}
-
-			if shift >= 0 {
+			if shift > 0 {
 				s.expandGoRoutines(shift)
 			} else {
 				s.shrinkGoRoutines(-shift)
 			}
-
-		case <-s.allCloseChan:
-			s.shrinkGoRoutines(s.numActives)
-			return
 		}
 	}
 }
@@ -175,6 +179,10 @@ func (s *Scheduler) expandGoRoutines(num int64) {
 				case <-s.closeChan:
 					atomic.AddInt64(&s.numActives, -1)
 					return
+
+				case <-s.allCloseChan:
+					atomic.AddInt64(&s.numActives, -1)
+					return
 				}
 			}
 		}()
@@ -187,5 +195,5 @@ func (s *Scheduler) PublishRequest(req *Request) {
 }
 
 func (s *Scheduler) Close() {
-	s.allCloseChan <- struct{}{}
+	close(s.allCloseChan)
 }
