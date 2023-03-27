@@ -148,6 +148,8 @@ func (s *Scheduler) control() {
 			} else {
 				s.shrinkGoRoutines(-shift)
 			}
+		case <-s.allCloseChan:
+			return
 		}
 	}
 }
