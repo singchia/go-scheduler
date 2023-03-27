@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	_ "net/http/pprof"
+	"os"
+	"os/signal"
 	"runtime"
 	"sync/atomic"
+	"syscall"
 	"time"
 
 	scheduler "github.com/singchia/go-scheduler"
@@ -34,7 +37,17 @@ func main() {
 	fmt.Printf("maxValue: %d\n", maxValue)
 
 	sch.Close()
-	time.Sleep(2 * time.Second)
+
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	done := make(chan bool, 1)
+	go func() {
+		<-sigs
+		done <- true
+	}()
+	<-done
+
 	fmt.Println(runtime.NumGoroutine())
 }
 
